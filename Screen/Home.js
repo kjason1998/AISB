@@ -34,6 +34,10 @@ const win = Dimensions.get('window');
 const ratioWidth = win.width / 649 / 2;
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        width:win.width,
+    },
     iconMenu:{
         color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
     },logOutTextButton:{

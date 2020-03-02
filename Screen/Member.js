@@ -10,10 +10,10 @@ const Member = props => {
         <Container style={styles.container}>
             <Header style={styles.header}>
                 <Left>
-                    <Icon name='menu' style={styles.iconMenu} onPress={props.openDrawer}/>
+                    <Icon name='menu' style={styles.iconMenu} onPress={props.openDrawer} />
                 </Left>
                 <Body>
-                    <Text style={styles.headerText}>Publication</Text>
+                    <Text style={styles.headerText}>Member</Text>
                 </Body>
                 <Right>
                     <Button transparent>
@@ -23,6 +23,9 @@ const Member = props => {
                     </Button>
                 </Right>
             </Header>
+            <View>
+
+            </View>
         </Container>
     );
 }
@@ -31,15 +34,19 @@ const win = Dimensions.get('window');
 const ratioWidth = win.width / 649 / 2;
 
 const styles = StyleSheet.create({
-    iconMenu:{
-        color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
-    },logOutTextButton:{
-        color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
-    },header:{
+    container: {
+        flex: 1,
+        width:win.width,
+    },
+    iconMenu: {
+        color: (Platform.OS === 'ios') ? '#147efb' : '#fff'
+    }, logOutTextButton: {
+        color: (Platform.OS === 'ios') ? '#147efb' : '#fff'
+    }, header: {
         marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
-    },headerText:{
-        fontWeight:'bold',
-        fontSize:18,
+    }, headerText: {
+        fontWeight: 'bold',
+        fontSize: 18,
         color: (Platform.OS === 'ios') ? '#000' : '#fff',
     }
 });
