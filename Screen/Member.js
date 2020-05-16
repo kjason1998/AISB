@@ -1,11 +1,138 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList, StatusBar } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { StyleSheet, Text, View, Image, Dimensions, StatusBar, Alert } from 'react-native';
 
-import { Container, Content, Header, Form, Input, Item, Button, Left, Right, Body, Icon, Title } from 'native-base';
+import { Container, Header, Button, Left, Right, Body, Icon } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
-import { membershipBenefits } from '../constans/StringsMembership'
+import { membershipBenefits } from '../constans/Strings'
 
 const Member = props => {
+
+    const [uuid, setUUID] = useState('');
+    const [typeLogin, setTypeLogin] = useState('Guest');
+    const [monthDifference, setMonthDifference] = useState('empty')
+    const [user,setUser] = useState(null)
+    const [userDocRef,setUserDocRef] = useState(null)
+    
+    const [userDatabaseRef,setUserDatabaseRef] = useState(null)
+
+    const [mainContentSize, setMainContentSize] = useState(14)
+
+    const [dateEnd,setDateEnd] = useState();
+    const [warning,setWarning] = useState(null)
+    
+    const createTwoButtonAlert = () =>
+        Alert.alert(
+            "Renew membership",
+            "Renewing will subscribe with the same membership as initially subscribed",
+            [
+            {text: "Cancel",onPress: () => 
+                console.log("Member.js alert user press cancel"),
+                style: "cancel"},
+            { text: "OK", onPress: () =>
+            userDocRef.set({
+                datemembershipend: new Date().getDate(),
+                monthmembershipend: new Date().getMonth()+1,
+                yearmembershipend: new Date().getFullYear() + userDatabaseRef.membershiplength,
+                premium:true,
+            },{merge:true})
+            }],
+            { cancelable: false }
+    );
+
+    //calculate difference in month
+    function monthDiff(from, till) {
+        var diff;
+        diff = (till.getFullYear() - from.getFullYear()) * 12;
+        diff -= from.getMonth()+1;
+        diff += till.getMonth();
+        return diff;
+    }
+
+    // make a date into string dd-mm-yyyy
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [day, month, year].join('-');
+    }
+
+    useEffect(() => {
+        props.firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUser(user);
+                if(user.uid){
+                    let userRef = props.firestore.collection('users').doc(user.uid);
+                    userRef.onSnapshot(docSnapshot => {
+                        let data = docSnapshot.data()
+    
+                        setMainContentSize(data.settingtextsize)
+                        }, err => {
+                        console.log(`Committee.js Encountered error: ${err}`);
+                        });
+                }
+            }
+        });
+    }, [mainContentSize]);
+
+    useEffect(() => {
+        if(monthDifference < 2){
+            if(monthDifference < 0){
+                setWarning('Membership expired on '+formatDate(dateEnd)+'\nClick to renew')
+            }
+            else{
+                if(dateEnd){
+                    setWarning('Membership expiring on '+formatDate(dateEnd)+'\nClick to renew')
+                }
+            }
+        }else{
+            setWarning('')
+        }
+    }, [monthDifference,dateEnd]);
+
+    useEffect(() => {
+        var user = props.firebase.auth().currentUser;
+        if (user) {
+            setUser(user)
+            setTypeLogin('Premium')
+            setUUID(user.uid);
+            setTypeLogin('Premium')
+            
+            if(user.uid){
+                let userRef = props.firestore.collection('users').doc(user.uid);
+                setUserDocRef(userRef)
+                userRef.onSnapshot(docSnapshot => {
+                    let data = docSnapshot.data()
+                    setUserDatabaseRef(data)
+                    setMainContentSize(data.settingtextsize)
+
+                    // get the date of membership end
+                    // this to check if we will give a warning
+                    // that membership is about to end (less than a month)
+                    let yearend = data.yearmembershipend
+                    let monthend = data.monthmembershipend
+                    let dateend = data.datemembershipend
+
+                    diff = monthDiff(
+                        new Date(), // current date
+                        new Date(yearend, monthend, dateend)  // end
+                    );
+
+                    setMonthDifference(diff)
+                    setDateEnd(new Date(yearend, monthend-1, dateend))
+                    }, err => {
+                    console.log(`Member.js Encountered error: ${err}`);
+                    });
+            }
+        }
+    }, [uuid,typeLogin,mainContentSize]);
+        
 
     return (
         // floating label is so that the label goes up when we click input text email
@@ -36,9 +163,11 @@ const Member = props => {
                 </View>
                 <View style={styles.contentView}>
                     <Text style={styles.membershipText}>Membership</Text>
-                    <Text style={styles.premiumText}>Premium</Text>
+                    <Text style={styles.premiumText}>{typeLogin}</Text>
+                    <Text style={styles.warningText}
+                        onPress={createTwoButtonAlert}>{warning}</Text>
                     <Text style={styles.HeadingDescription}>All members receive the following membership benefits:​</Text>
-                    <Text style={styles.descriptionText}>{membershipBenefits}</Text>
+                    <Text style={[styles.descriptionText,{fontSize:mainContentSize}]}>{membershipBenefits}</Text>
                 </View>
             </ScrollView>
         </Container>
@@ -53,13 +182,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: win.width,
-    },
-    iconMenu: {
+    }, iconMenu: {
         color: (Platform.OS === 'ios') ? '#147efb' : '#fff'
     }, logOutTextButton: {
         color: (Platform.OS === 'ios') ? '#147efb' : '#fff'
     }, header: {
-        marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
+        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     }, headerText: {
         fontWeight: 'bold',
         fontSize: 18,
@@ -70,24 +198,19 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-    },
-    profileView: {
+    }, profileView: {
         // opacity: 0.5,
         // backgroundColor: '#000000'
-    },
-    logo: {
+    }, logo: {
         marginTop: heightBg / 2.5,
-    },
-    imageBackground: {
+    }, imageBackground: {
         resizeMode: 'cover',
         height: heightBg,
         width: win.width,
-    },
-    containerMember: {
+    }, containerMember: {
         alignItems: 'center',
-    },
-    contentView: {
-        marginVertical: 15,
+    }, contentView: {
+        padding: 15,
         width: win.width,
         flexDirection: 'column',
         alignItems: 'center'
@@ -98,11 +221,18 @@ const styles = StyleSheet.create({
         color: '#01758E',
         fontStyle: 'italic',
         fontWeight:'bold'
-    },descriptionText:{
-        margin:20
-    },HeadingDescription:{
+    }, HeadingDescription:{
         marginTop:20,
         fontSize:18
+    }, descriptionText:{
+        //fontSize:mainContentSize,
+        color:'grey',
+        marginTop:15
+    }, warningText:{
+        fontStyle:1,
+        color:'red',
+        fontStyle:'italic',
+        textAlign: 'center',
     }
 });
 

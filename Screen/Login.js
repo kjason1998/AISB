@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions, SafeAreaView, ActivityIndicator, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { Container, Content, Header, Form, Input, Item, Button, Label } from 'native-base';
@@ -8,6 +8,7 @@ const Login = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showLoading, setShowLoading] = useState(false);
+  const [user,setUser] = useState(null)
 
   const emailStringHandler = (inputString) => {
     setEmail(inputString);
@@ -24,8 +25,8 @@ const Login = props => {
     await props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(
         (user) => {
+          //setUser(user)
           setShowLoading(false);
-          props.loginEmailPassword()
         })
       .catch(
         (error) => {
@@ -40,6 +41,26 @@ const Login = props => {
         })
   }
 
+  useEffect(() => {
+    if(user){
+      props.loginEmailPassword()
+    }
+  },[user]);
+
+  const forgetPasswordHandler = () =>{
+    if(!email){
+      alert('Please enter the email address');
+    }else{
+      var auth = props.firebase.auth();
+
+      auth.sendPasswordResetEmail(email).then(function() {
+        alert('Please check your email \n(it may take up to 5 minutes)')
+      }).catch(function(error) {
+        alert('Please check your email address that you put')
+      });
+    }
+  }
+
 
   // control sign up button
   const singUplHandler = () => {
@@ -52,7 +73,7 @@ const Login = props => {
       <SafeAreaView style={styles.container}>
         <Image
           style={styles.logoIcon}
-          source={require('./Pictures/AISB_Large.png')}></Image>
+          source={require('../Pictures/AISB_Large.png')}></Image>
         <KeyboardAvoidingView
           behavior='padding'>
           <Form
@@ -66,7 +87,7 @@ const Login = props => {
                 onChangeText={emailStringHandler}
               />
             </Item>
-            <Item style={styles.inputItem}>
+            <Item style={styles.inputItemLast}>
               <Input
                 style={styles.inputText}
                 secureTextEntry={true}
@@ -78,6 +99,11 @@ const Login = props => {
                 onSubmitEditing={loginHandler}
               />
             </Item>
+            <View style={styles.forgotButtonHolder}>
+              <Button small transparent onPress={forgetPasswordHandler}>
+                <Text style={styles.forgetPasswordText}>Forget Password</Text>
+              </Button>
+            </View>
           </Form>
         </KeyboardAvoidingView>
         {showLoading &&
@@ -137,6 +163,16 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   }, formStyle: {
     paddingBottom:win.height/40
+  }, forgotButtonHolder:{
+    width: win.width / 2,
+    flexDirection:'row-reverse'
+  }, inputItemLast: {
+    width: win.width / 2,
+    borderBottomColor: '#01458E',
+    borderBottomWidth: 1.5,
+  }, forgetPasswordText:{
+    fontSize:10,
+    color:'#01458E',
   }
 });
 

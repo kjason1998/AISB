@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AISB2",
-    "slug": "AISB2",
+    "name": "AISB Mobile",
+    "slug": "AISB-Mobile",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -24,7 +24,12 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.SwanseaUniversity.AISB",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.SwanseaUniversity.AISB",
+      "versionCode": 1
     }
   }
 }

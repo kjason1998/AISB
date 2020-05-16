@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { ActivityIndicator, Dimensions, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-
-import TextJournal from './TextJournal';
 
 // Screen Dimensions
 const { height, width } = Dimensions.get('window');
@@ -25,6 +23,7 @@ export default class InfiniteScroll extends React.Component {
     // Component Did Mount - invoked immediately after a component is mounted (this is a good place to instantiate the network request)
     componentDidMount = () => {
         try {
+            console.log('Infinite scroll 26')
             // Cloud Firestore: Initial Query
             this.retrieveData();
             this.props.firebase.auth().onAuthStateChanged((user) => {
@@ -44,6 +43,7 @@ export default class InfiniteScroll extends React.Component {
 
     // Retrieve Data
     retrieveData = async () => {
+        console.log('Infinite scroll retrieve data 45')
         try {
             // Set State: Loading
             this.setState({
@@ -74,6 +74,7 @@ export default class InfiniteScroll extends React.Component {
 
     // Retrieve More
     retrieveMore = async () => {
+        console.log('Infinite scroll 75')
         try {
             // Set State: Refreshing
             this.setState({
@@ -91,42 +92,19 @@ export default class InfiniteScroll extends React.Component {
             let documentData = documentSnapshots.docs.map(document => document.data());
             // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
             let lastVisible = documentData[documentData.length - 1].id;
+
+            
+            // Cloud Firestore: Last Visible Document (Document ID To Start From For Proceeding Queries)
+            //let lastVisibleIn = documentSnapshots.docs[documentSnapshots.docs.length - 1].id;
+            setLastItemId(documentSnapshots.docs[documentSnapshots.docs.length - 1].id)
+
+
             // Set State
             this.setState({
                 documentData: [...this.state.documentData, ...documentData],
                 lastVisible: lastVisible,
                 refreshing: false,
             });
-        }
-        catch (error) {
-            console.log(error);
-        }
-    };
-
-    // Render Header of all the list - currently not used
-    renderHeader = () => {
-        try {
-            return (
-                <Text style={styles.headerText}>AISB QUATERLY</Text>
-            )
-        }
-        catch (error) {
-            console.log(error);
-        }
-    };
-    
-    // Render Footer
-    renderFooter = () => {
-        try {
-            // Check If Loading
-            if (this.state.loading) {
-                return (
-                    <ActivityIndicator />
-                )
-            }
-            else {
-                return null;
-            }
         }
         catch (error) {
             console.log(error);
@@ -141,6 +119,7 @@ export default class InfiniteScroll extends React.Component {
                     data={(this.state.documentData)}
                     // Render Items
                     renderItem={({ item }) => (
+                        //check if header
                         item.header === true ?
                         <View style={styles.headerContainer}>
                             <Text style={styles.headerText}>
@@ -148,6 +127,8 @@ export default class InfiniteScroll extends React.Component {
                             </Text>
                         </View> 
                         :
+                        // if not header
+                        // also check if item is not premium
                         item.premium == false ?
                         <View style={styles.itemContainer}>
                             <Text style={styles.textJournal}
@@ -156,10 +137,14 @@ export default class InfiniteScroll extends React.Component {
                             </Text>
                         </View> 
                         :
+                        // if it is premium
+                        // check if uuid is empty (not logged in as a member
+                        // if yes show nothing
                         this.state.uuid === '' ?
-                        <View></View>
+                        <View></View> 
                         :
-                        <View style={styles.itemContainer}>
+                        // if journal is not premium
+                        <View style={styles.itemContainer}> 
                             <Text style={styles.textJournal}
                                 onPress={() => this.props.openPDFFromScroll(item.link,item.title)}>
                                 {item.title}
@@ -168,10 +153,6 @@ export default class InfiniteScroll extends React.Component {
                     )}
                     // Item Key
                     keyExtractor={(item, index) => String(index)}
-                    // Header (Title)
-                    //ListHeaderComponent={this.renderHeader}
-                    // Footer (Activity Indicator)
-                    ListFooterComponent={this.renderFooter}
                     // On End Reached (Takes a function)
                     onEndReached={this.retrieveMore}
                     // How Close To The End Of List Until Next Data Request Is Made
@@ -189,32 +170,24 @@ const styles = StyleSheet.create({
         height: height,
         width: width,
         alignItems: 'center',
-    },
-    headerText: {
+    }, headerText: {
         fontSize: 20,
         fontWeight: '600',
         color: 'gray',
         margin: 12,
         textAlign: 'center'
-    },
-    headerContainer: {
+    }, headerContainer: {
         width: width,
         borderColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    itemContainer: {
+    }, itemContainer: {
         height: 18,
         width: width,
         borderColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    text: {
-        fontSize: 16,
-        fontWeight: '400',
-        color: '#000',
-    },textJournal: {
+    }, textJournal: {
         alignItems: 'center',
         color: 'black',
         textDecorationLine: 'underline',

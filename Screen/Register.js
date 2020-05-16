@@ -30,32 +30,36 @@ const Register = props => {
   const addInFirestore = () => {
     user = props.firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        const docRef = props.firebase.firestore().collection("Users").doc(user.uid);
+        const docRef = props.firebase.firestore().collection("users").doc(user.uid);
         docRef.set({
           email: email,
           datemembershipstart: new Date().getDate(),
-          monthmembershipstart: new Date().getMonth(),
+          monthmembershipstart: new Date().getMonth()+1,
           yearmembershipstart: new Date().getFullYear(),
           datemembershipend: new Date().getDate(),
-          monthmembershipend: new Date().getMonth(),
+          monthmembershipend: new Date().getMonth()+1,
+          settingtextsize:12,
+          premium:true,
         })
           .then(() => {
             if (pickedMembership.membership != null) {
               docRef.update({
                 membershiptype: pickedMembership.membership,
                 yearmembershipend: new Date().getFullYear() + pickedMembership.year,
+                membershiplength:pickedMembership.year,
               })
                 .then(() => {
-                  props.registerSuccess();
+                  //props.registerSuccess();
                   setShowLoading(false);
                 })
-            } else { // if user did not pick any membership
+            } else { // if user did not pick any membership - which is the first choice
               docRef.update({
                 membershiptype: "UK/EU 1 year",
                 yearmembershipend: new Date().getFullYear() + 1,
+                membershiplength:1,
               })
                 .then(() => {
-                  props.registerSuccess();
+                  //props.registerSuccess();
                   setShowLoading(false);
                 })
             }
@@ -91,7 +95,7 @@ const Register = props => {
           if (errorCode == 'auth/email-already-in-use') {
             alert('Email is already registered, please sign in or sign up different email address.');
           } else {
-            alert(errorMessage);
+            console.log('Register.js error whe signing up inside signuphandler: '+errorMessage)
           }
         })
     }
@@ -103,7 +107,7 @@ const Register = props => {
       <SafeAreaView style={styles.container}>
         <Image
           style={styles.logoIcon}
-          source={require('./Pictures/AISB_Large.png')} />
+          source={require('../Pictures/AISB_Large.png')} />
         <KeyboardAvoidingView
           behavior='padding'>
           <Form
@@ -134,7 +138,7 @@ const Register = props => {
                 style={styles.pickerMembership}
                 selectedValue={pickedMembership.membership}
                 onValueChange={(itemValue, itemIndex) => { setMembership(itemValue, itemIndex) }}>
-                <Picker.Item label="UK/EU (1)" value="UK/EU (1)" />
+                <Picker.Item label="UK/EU (1)" value="UK/EU (1)"/>
                 <Picker.Item label="UK/EU (3)" value="UK/EU (3)" />
                 <Picker.Item label="UK/EU Student/Retired (1)" value="UK/EU Student/Retired (1)" />
                 <Picker.Item label="UK/EU Seniors (3)" value="UK/EU Seniors (3)" />
@@ -157,7 +161,7 @@ const Register = props => {
         {showLoading &&
           <ActivityIndicator size="large" color='#01458E' />
         }
-        <Form style={styles.form}>
+        <Form>
           <Button style={styles.buttonSquare}
             transparent
             primary
@@ -214,11 +218,11 @@ const styles = StyleSheet.create({
     paddingLeft: -5,
     height: 25,
   }, pickerMembership: {
-    width: win.width / 2,
+    width: win.width,
   }, itemPicker: {
     borderColor: 'transparent',
   }, formStyle: {
-
+    alignItems:'center'
   }
 });
 

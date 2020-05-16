@@ -3,10 +3,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet, Text, View, Image, Dimensions, FlatList, StatusBar } from 'react-native';
 import { Container, Content, Header, Form, Input, Item, Button, Left, Right, Body, Icon, Title } from 'native-base';
 
-import InfiniteScroll from '../Components/InfiniteScroll'
-import InfiniteScrollJournals from '../Components/InfiniteScrollJournals'
+import InfiniteScroll from '../Components/InfiniteScrollConventions'
 
-const Home = props => {
+const Convention = props => {
 
     return (
         // floating label is so that the label goes up when we click input text email
@@ -16,7 +15,7 @@ const Home = props => {
                     <Icon name='menu' style={styles.iconMenu} onPress={props.openDrawer}/>
                 </Left>
                 <Body>
-                    <Text style={styles.headerText}>Journals</Text>
+                    <Text style={styles.headerText}>Convention</Text>
                 </Body>
                 <Right>
                     <Button transparent>
@@ -26,7 +25,7 @@ const Home = props => {
                     </Button>
                 </Right>
             </Header>
-            <InfiniteScrollJournals firebase={props.firebase} database={props.firestore} openPDFFromScroll={props.openPDF}/>
+            <InfiniteScroll firebase={props.firebase} database={props.firestore} openPDFFromScroll={props.openPDF}/>
         </Container>
     );
 }
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
     },logOutTextButton:{
         color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
     },header:{
-        //marginTop: StatusBar.currentHeight
+        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     },headerText:{
         fontWeight:'bold',
         fontSize:18,
@@ -52,4 +51,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Home;
+export default Convention;
