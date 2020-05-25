@@ -4,7 +4,7 @@ import { StyleSheet, Text, Dimensions, StatusBar,View } from 'react-native';
 import { Container, Header, Button, Left, Right, Body, Icon } from 'native-base';
 
 import { ScrollView } from 'react-native-gesture-handler';
-import { aboutAISB, BulletPointsAboutAISB} from '../constans/Strings'
+import { aboutAISB, BulletPointsAboutAISB} from '../constans/AISBString'
 
 const AISB = props => {
 
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },logOutTextButton:{
         color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
     },header:{
-        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
+        marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     },headerText:{
         fontWeight:'bold',
         fontSize:18,

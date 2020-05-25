@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },logOutTextButton:{
         color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
     },header:{
-        //marginTop: StatusBar.currentHeight
+        marginTop: StatusBar.currentHeight
     },headerText:{
         fontWeight:'bold',
         fontSize:18,

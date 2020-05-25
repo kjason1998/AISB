@@ -14,6 +14,8 @@ import Register from './Screen/Register'
 import PDFViewer from './Components/PDFViewer';
 import DrawerNav from './Components/DrawerNavigator'
 
+console.disableYellowBox = true;
+
 firebase.initializeApp(firebaseConfig);
 
 export default function App() {

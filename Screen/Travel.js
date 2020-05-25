@@ -4,7 +4,7 @@ import { StyleSheet, Text, Dimensions, StatusBar,View } from 'react-native';
 import { Container, Header, Button, Left, Right, Body, Icon } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { studentTravelAwards,studentTravelAwardsDetails,studentTravelAwardsHowTo} from '../constans/Strings'
+import { studentTravelAwards,studentTravelAwardsDetails,studentTravelAwardsHowTo} from '../constans/TravelString'
 
 const Travel = props => {
 
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     },logOutTextButton:{
         color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
     },header:{
-        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
+        marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     },headerText:{
         fontWeight:'bold',
         fontSize:18,

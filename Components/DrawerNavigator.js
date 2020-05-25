@@ -145,26 +145,27 @@ const DrawerNav = props => {
         return (
             <NavigationContainer>
                 <Drawer.Navigator initialRouteName="Home">
-            
-                    <Drawer.Screen name="Convention" component={ConventionScreen} />
 
-                    <Drawer.Screen name="Workshop" component={WorkshopScreen} />
+                    <Drawer.Screen name="Home" component={HomeScreen} />
 
-                    <Drawer.Screen name="Fellows" component={FellowsScreen} />
+                    <Drawer.Screen name="Member" component={MemberScreen} />
+
+                    <Drawer.Screen name="Setting" component={SettingScreen} />
+
+                    <Drawer.Screen name="AISB" component={AISBScreen} />
 
                     <Drawer.Screen name="Committee" component={CommitteeScreen} />
 
-                    <Drawer.Screen name="Travel Awards" component={TravelScreen} />
-                    
+                    <Drawer.Screen name="Convention" component={ConventionScreen} />
+
                     <Drawer.Screen name="Events" component={EventsScreen} />
 
-                    <Drawer.Screen name="Home" component={HomeScreen} />
-    
-                    <Drawer.Screen name="Member" component={MemberScreen} />
-    
-                    <Drawer.Screen name="AISB" component={AISBScreen} />
+                    <Drawer.Screen name="Fellows" component={FellowsScreen} />
+
+                    <Drawer.Screen name="Travel Awards" component={TravelScreen} />
+
+                    <Drawer.Screen name="Workshop" component={WorkshopScreen} />
                     
-                    <Drawer.Screen name="Setting" component={SettingScreen} />
                 </Drawer.Navigator>
             </NavigationContainer>
         );
@@ -172,23 +173,23 @@ const DrawerNav = props => {
         return (
             <NavigationContainer>
                 <Drawer.Navigator initialRouteName="Home">
-                    <Drawer.Screen name="Convention" component={ConventionScreen} />
+                    <Drawer.Screen name="Home" component={HomeScreen} />
 
-                    <Drawer.Screen name="Workshop" component={WorkshopScreen} />
+                    <Drawer.Screen name="Member" component={MemberScreen} />
 
-                    <Drawer.Screen name="Fellows" component={FellowsScreen} />
+                    <Drawer.Screen name="AISB" component={AISBScreen} />
 
                     <Drawer.Screen name="Committee" component={CommitteeScreen} />
 
-                    <Drawer.Screen name="Travel Awards" component={TravelScreen} />
+                    <Drawer.Screen name="Convention" component={ConventionScreen} />
 
                     <Drawer.Screen name="Events" component={EventsScreen} />
 
-                    <Drawer.Screen name="Home" component={HomeScreen} />
-    
-                    <Drawer.Screen name="Member" component={MemberScreen} />
-    
-                    <Drawer.Screen name="AISB" component={AISBScreen} />
+                    <Drawer.Screen name="Fellows" component={FellowsScreen} />
+
+                    <Drawer.Screen name="Travel Awards" component={TravelScreen} />
+
+                    <Drawer.Screen name="Workshop" component={WorkshopScreen} />
     
                 </Drawer.Navigator>
             </NavigationContainer>

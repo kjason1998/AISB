@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     }, logOutTextButton: {
         color: (Platform.OS === 'ios') ? '#147efb' : '#fff'
     }, header: {
-        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
+        marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     }, headerText: {
         fontWeight: 'bold',
         fontSize: 18,

@@ -5,7 +5,7 @@ import { Container, Header, Button, Left, Right, Body, Icon } from 'native-base'
 import { ScrollView } from 'react-native-gesture-handler';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 
-import { Events2019Update, Events2019About,Events2019Location,Events2019Loebner,Events2018,Events2018All} from '../constans/Strings'
+import { Events2019Update, Events2019About,Events2019Location,Events2019Loebner,Events2018,Events2018All} from '../constans/EventsString'
 import { events2018TableData} from '../constans/Data'
 
 const Events = props => {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },logOutTextButton:{
         color:(Platform.OS === 'ios') ? '#147efb' : '#fff'
     },header:{
-        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
+        marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     },headerText:{
         fontWeight:'bold',
         fontSize:18,

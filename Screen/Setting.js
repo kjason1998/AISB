@@ -1,9 +1,9 @@
 import React, { useState,useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions,StatusBar } from 'react-native';
 
 import { Container, Header, Button, Left, Right, Body, Icon } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
-import { aboutAISB } from '../constans/Strings'
+import { aboutAISB } from '../constans/AISBString'
 
 const Setting = props => {
 
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     }, logOutTextButton: {
         color: (Platform.OS === 'ios') ? '#147efb' : '#fff'
     }, header: {
-        //marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
+        marginTop: (Platform.OS === 'ios') ? 0 : StatusBar.currentHeight
     }, headerText: {
         fontWeight: 'bold',
         fontSize: 18,
